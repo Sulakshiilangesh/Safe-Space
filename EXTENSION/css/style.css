@@ -22,6 +22,7 @@ body {
     border-radius: 10px;
     padding: 20px 30px;
     width: auto;
+    min-width: 300px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
 }
@@ -72,6 +73,7 @@ input {
 }
 
 .password-container input {
+    margin: 0;
     border: none;
     border-right: 1px solid #9f9f9f;
     flex: 1;

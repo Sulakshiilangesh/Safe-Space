@@ -1,0 +1,34 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Safe-Space",
+    "description": "",
+    "version": "1.0",
+    "icons": {  
+        "16": "images/exit.png",
+        "48": "images/exit.png",
+        "128": "images/exit.png" 
+    },
+    "background":{
+      "scripts":["js/general.js"],
+      "persistent": false
+    },
+    "content_scripts": [{
+      "css": [
+          "css/style.css"
+      ],
+      "js": [
+          "js/general.js"
+      ],
+      "matches": ["*://*/*"]
+    }],
+    "browser_action": {
+      "default_icon": "images/exit.png",
+      "default_popup": "Signup.html"
+    },
+    "permissions": [
+            "storage",
+            "tabs",
+            "activeTab"
+          ]
+  }

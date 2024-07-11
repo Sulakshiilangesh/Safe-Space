@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h2>Welcome to Safe-Space!</h2>
-        <button class="close-button"><i class="gg-close-r"></i></button>
+        <button class="close-button" id="close-button"><i class="gg-close-r"></i></button>
         <form>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name">
@@ -17,17 +17,18 @@
             <input type="email" id="email" name="email">
             <label for="master-password">Master Password:</label>
             <div class="password-container">
-                <input type="password" id="master-password" name="master-password">
-                <button type="button" class="show-password"><i class="gg-eye"></i></button>
+                <input type="password" id="password" name="master-password">
+                <button type="button" class="show-password" id="show-password"><i class="gg-eye"></i></button>
             </div>
             <label for="confirm-password">Confirm Master Password:</label>
             <div class="password-container">
-                <input type="password" id="confirm-password" name="confirm-password">
-                <button type="button" class="show-password"><i class="gg-eye"></i></button>
+                <input type="password" id="password" name="confirm-password">
+                <button type="button" class="show-password" id="show-password"><i class="gg-eye"></i></button>
             </div>
             <button type="submit">SAVE</button>
         </form>
         <h4>SAFE-SPACE</h4>
     </div>
 </body>
+<script src="js/general.js"></script>
 </html>
