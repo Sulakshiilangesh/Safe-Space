@@ -5,9 +5,9 @@
     "description": "",
     "version": "1.0",
     "icons": {  
-        "16": "images/exit.png",
-        "48": "images/exit.png",
-        "128": "images/exit.png" 
+        "16": "images/icon.png",
+        "48": "images/icon.png",
+        "128": "images/icon.png" 
     },
     "background":{
       "scripts":["js/general.js"],
@@ -23,8 +23,8 @@
       "matches": ["*://*/*"]
     }],
     "browser_action": {
-      "default_icon": "images/exit.png",
-      "default_popup": "Signup.html"
+      "default_icon": "images/icon.png",
+      "default_popup": "ViewPassword.html"
     },
     "permissions": [
             "storage",
