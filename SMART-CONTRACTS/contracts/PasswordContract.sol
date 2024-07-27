@@ -11,13 +11,44 @@ contract PasswordContract {
     mapping(string => Password) private passwords;
     string[] private services;
 
+    event PasswordAdded(string service);
+    event PasswordUpdated(string service);
+    event PasswordDeleted(string service);
+
     function addPassword(string memory _service, bytes32 _username, bytes32 _password) public {
+        require(bytes(_service).length > 0, "Service name cannot be empty");
+        require(passwords[_service].username == bytes32(0), "Service already exists");
+
         passwords[_service] = Password(_service, _username, _password);
         services.push(_service);
+
+        emit PasswordAdded(_service);
     }
 
-    function getPassword(string memory _service) public view returns(Password memory) {
+    function getPassword(string memory _service) public view returns (Password memory) {
+        require(bytes(_service).length > 0, "Service name cannot be empty");
+        require(passwords[_service].username != bytes32(0), "Service does not exist");
+
         return passwords[_service];
+    }
+
+    function editPassword(string memory _service, bytes32 _username, bytes32 _password) public {
+        require(bytes(_service).length > 0, "Service name cannot be empty");
+        require(passwords[_service].username != bytes32(0), "Service does not exist");
+
+        passwords[_service] = Password(_service, _username, _password);
+
+        emit PasswordUpdated(_service);
+    }
+
+    function deletePassword(string memory _service) public {
+        require(bytes(_service).length > 0, "Service name cannot be empty");
+        require(passwords[_service].username != bytes32(0), "Service does not exist");
+
+        delete passwords[_service];
+        removeService(_service);
+
+        emit PasswordDeleted(_service);
     }
 
     function getAllPasswords() public view returns (Password[] memory) {
@@ -28,20 +59,11 @@ contract PasswordContract {
         return allPasswords;
     }
 
-    function editPassword(string memory _service, bytes32 _username, bytes32 _password) public {
-        passwords[_service] = Password(_service, _username, _password);
-    }
-
-    function deletePassword(string memory _service) public {
-        delete passwords[_service];
-        
-        // Find the index of the service in the services array
+    function removeService(string memory _service) internal {
         uint index = findServiceIndex(_service);
-        
-        // If the service was found, remove it from the array
         if (index < services.length) {
-            services[index] = services[services.length - 1]; // Move the service to the last spot
-            services.pop(); // Remove the last element
+            services[index] = services[services.length - 1];
+            services.pop();
         }
     }
 

@@ -96,7 +96,6 @@ function SuggestPassword() {
 
                 document.body.appendChild(passwordSuggestion);
 
-                // Remove button after click
                 passwordSuggestion.addEventListener('click', function() {
                     passwordField.value = strongPassword;
                     passwordSuggestion.remove(); 

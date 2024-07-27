@@ -10,7 +10,11 @@ if (close) {
 const showButtons = document.querySelectorAll('.show-password');
 showButtons.forEach(button => {
     button.addEventListener('click', function() {
-        const passwordField = button.previousElementSibling;
+        let previousSibling = button.previousElementSibling;
+        while (previousSibling.tagName !== 'INPUT') {
+            previousSibling = previousSibling.previousElementSibling;
+        }
+        const passwordField = previousSibling;
         if (passwordField.type === 'password') {
             passwordField.type = 'text';
             setTimeout(() => {
