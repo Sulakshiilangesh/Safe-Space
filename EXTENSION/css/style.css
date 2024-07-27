@@ -56,6 +56,10 @@
     margin-top: 5px;
 }
 
+.username-container input#username {
+    margin-top: 0;
+}
+
 .container input {
     padding: 10px;
     border: 1px solid #9f9f9f;
@@ -64,7 +68,7 @@
     outline: none;
 }
 
-.password-container {
+.password-container, .username-container {
     display: flex;
     align-items: center;
     border: 1px solid #9f9f9f;
@@ -73,10 +77,19 @@
     margin-top: 5px;
 }
 
-.password-container input {
+.copy-container {
+    border-right: 1px solid #9f9f9f;
+    border-left: 1px solid #9f9f9f;
+    padding: 10px 0;
+}
+
+.username-container .copy-container {
+    border-right: none;
+}
+
+.password-container input, .username-container input {
     margin: 0;
     border: none;
-    border-right: 1px solid #9f9f9f;
     flex: 1;
     padding: 10px;
     width: 10%;
@@ -84,12 +97,27 @@
     border-bottom-right-radius: 0;
 }
 
-.show-password {
+.show-password, .copy {
     background: none;
     cursor: pointer;
     padding: 0 10px;
     font-size: 14px;
     border: none;
+}
+
+.copy {
+    margin: 0 2px;
+}
+
+#username-tooltip, #password-tooltip {
+    position: absolute;
+    display: none;
+    margin-left: 40px;
+    padding: 5px 12px;
+    background-color: #000000df;
+    border-radius: 4px;
+    color: #fff;
+    transform: translate(-50%,20%);
 }
 
 .container button[type="submit"] {
@@ -102,6 +130,10 @@
     font-size: 16px;
     cursor: pointer;
     font-family: "Architects Daughter", cursive;
+}
+.container button.delete {
+    margin-top: 5px;
+    background-color: rgb(108, 9, 9);
 }
 
 .container h4 {

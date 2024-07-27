@@ -1,15 +1,49 @@
 // Exit
-document.getElementById('close-button').addEventListener('click', function() {
-    window.close();
+const close = document.getElementById('close-button');
+if (close) {
+    close.addEventListener('click', function() {
+        window.close();
+    });
+};
+
+// Show Password for 0.5 seconds
+const showButtons = document.querySelectorAll('.show-password');
+showButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const passwordField = button.previousElementSibling;
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            setTimeout(() => {
+                passwordField.type = 'password';
+            }, 500);
+        }
+    });
 });
 
-// Make Passwords Visible for 2 seconds
-document.getElementById('show-password').addEventListener('click', function() {
-    const passwordField = document.getElementById('password');
-    if (passwordField.type === 'password') {
-        passwordField.type = 'text';
+// Copy Password
+const copy_password = document.getElementById('copy-password');
+var password = document.getElementById('password');
+if (copy_password) {
+    copy_password.addEventListener('click', function() {   
+        document.getElementById("password-tooltip").style.display = "block"; 
+        navigator.clipboard.writeText(password.value);
         setTimeout(() => {
-            passwordField.type = 'password';
-        }, 2000);
-    }
-});
+            document.getElementById("password-tooltip").style.display = "none";
+        }, 1000);
+    });
+};
+
+// Copy Username
+const copy_username = document.getElementById('copy-username');
+var username = document.getElementById('username');
+if (copy_username) {
+    copy_username.addEventListener('click', function() {
+        document.getElementById("username-tooltip").style.display = "block"; 
+        navigator.clipboard.writeText(username.value);
+        setTimeout(() => {
+            document.getElementById("username-tooltip").style.display = "none";
+        }, 1000);
+    });
+};
+
+// 
