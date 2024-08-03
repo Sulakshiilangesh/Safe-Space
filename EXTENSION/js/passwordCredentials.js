@@ -149,7 +149,7 @@ function pageLoad() {
             }
         }
         if (inputs[i].type === "hidden" || inputs[i].type === "submit" || inputs[i].type === "reset" || inputs[i].type === "button" || inputs[i].hidden === true || inputs[i].disabled === true) {
-        invalidInputs++;
+            invalidInputs++;
         }
     }
     validInputs = inputs.length - invalidInputs;
