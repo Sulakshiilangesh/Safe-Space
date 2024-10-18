@@ -1,0 +1,1 @@
+An Ethereum-based Password Manager Extension for Chrome.
