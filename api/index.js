@@ -56,6 +56,10 @@ const passwordContract = new ethers.Contract(passwordContractAddress, passwordAB
 
 const crypto = require('crypto');
 
+function deriveKey(masterPassword, salt) {
+    return crypto.pbkdf2Sync(masterPassword, salt, 100000, 32, 'sha256');
+}
+
 const hashPassword = (masterPassword) => {
     const hash = crypto.createHash('sha256'); // Create a SHA-256 hash instance
     hash.update(masterPassword); // Update the hash with the password
@@ -65,8 +69,9 @@ const hashPassword = (masterPassword) => {
 
 // Function to compare passwords
 const comparePasswords = (plaintextPassword, storedHashedPasswordHex) => {
-    const hashedPlaintextPassword = hashPassword(plaintextPassword); // Hash the input password
-    const storedHashedPasswordBuffer = Buffer.from(storedHashedPasswordHex, 'hex'); // Convert hex string to Buffer
+    const hashedPlaintextPassword = hashPassword(plaintextPassword); 
+
+    const storedHashedPasswordBuffer = Buffer.from(storedHashedPasswordHex.slice(2), 'hex'); // Convert hex string to Buffer
     return hashedPlaintextPassword.equals(storedHashedPasswordBuffer); // Compare the buffers
 };
 
@@ -99,7 +104,6 @@ app.post('/loginUser', async (req, res) => {
     if (!storedHashedPasswordHex) {
         return res.status(401).send('User not found');
     }
-
     const isPasswordValid = comparePasswords(password, storedHashedPasswordHex);
 
     if (isPasswordValid) {
