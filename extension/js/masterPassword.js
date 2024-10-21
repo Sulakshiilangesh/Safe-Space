@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', function () {
     
         if (masterPasswordValue === confirmPasswordValue) {
             try {
-            const response = await fetch('http://localhost:3000/registerUser', {
+                const response = await fetch('http://localhost:3000/registerUser', {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                 name: nameValue,

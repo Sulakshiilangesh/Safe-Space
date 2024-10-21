@@ -115,18 +115,42 @@ function SuggestPassword() {
     });
 }
 
-function AutoFillCredentials() { 
-    // retrieve credentials using current tab url
-    // Decrypt Password
-    // Autofill into login form
+// Function to prompt the user for the master password and authenticate
+async function authenticateUser() {
+    const masterPassword = prompt("Enter your master password to authenticate:");
+
+    if (!masterPassword) {
+        throw new Error("Authentication cancelled or password not provided.");
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/loginUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password: masterPassword }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Authentication failed: Invalid password.');
+        }
+
+        console.log("User authenticated successfully.");
+        return true;  // Return true if authenticated successfully
+    } catch (error) {
+        console.error('Error during authentication:', error.message);
+        return false;  // Return false if authentication failed
+    }
 }
 
-function SavePassword() {
+
+function AutofillToSave() {
     // Get Login credentials from loginform and display it autofilled in SavePasssword.html\
     if (event.target.tagName === 'FORM') {
         var username = event.target.querySelector('input[type="text"], input[name="username"]').value;
         var password = event.target.querySelector('input[type="password"]').value;
-        var url = window.location.href;
+        var url = window.location.hostname;
         alert(username);
         alert(password);
         alert(url);
@@ -139,18 +163,79 @@ function SavePassword() {
             url: url
         });
     }
-    // Encrypt Password
-
-    // Save to Blockchain
 }
 
-function checkForCredentials() {
+function saveCredentials() {
+    document.addEventListener('DOMContentLoaded', function () {
+        var website = document.getElementById('website');
+        var username = document.getElementById('username');
+        var servicePassword = document.getElementById('servicePassword');
+        var saveButton = document.getElementById('saveButton');
+
+        saveButton.addEventListener('click', async function (event) {
+            const websiteValue = website.value;
+            const usernameValue = username.value;
+            const servicePasswordValue = servicePassword.value;
+
+            const isAuthenticated = await authenticateUser();
+            if (!isAuthenticated) {
+                alert('Authentication failed. Cannot save credentials.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                service: websiteValue,
+                username: usernameValue,
+                servicePassword: servicePasswordValue
+                })
+            });
     
+            if (response.ok) {
+                alert("Password Added Successfully!");
+            } else {
+                alert("Error adding password");
+            }
+            } catch (error) {
+            console.error('Error adding password:', error);
+            }
+        })
+    });
+}
+
+async function autofillCredentialsIfFound(service) {
+    try {
+        const response = await fetch(`http://localhost:3000/password?service=${service}`, {
+            method: 'GET'
+        });
+        if (!response.ok) {
+            throw new Error('No saved credentials found');
+        }
+
+        const data = await response.json();
+        // Autofill the credentials in the form
+        const usernameField = document.querySelector('input[type="text"], input[name="username"]');
+        const passwordField = document.querySelector('input[type="password"]');
+
+        if (usernameField && passwordField) {
+            usernameField.value = data.username;
+            passwordField.value = data.password;
+            console.log('Credentials autofilled');
+        }
+    } catch (error) {
+        console.log('No credentials found for this service:', error.message);
+    }
 }
 
 // For every current Chrome tab
 function pageLoad() {
     var inputs = document.getElementsByTagName("input");
+    var service = window.location.hostname;
     var passwordFound = false;
     var invalidInputs = 0; // includes input type: hidden, submit, reset, button
     var validInputs = 0; // everything else
@@ -170,18 +255,25 @@ function pageLoad() {
         }
     }
     validInputs = inputs.length - invalidInputs;
+
     if (passwordFound && validInputs <= 2) {
-        // login forms
+        // Login form detected
         alert("Login Page Detected!");
+
+        // Autofill credentials if they are found for this service
+        autofillCredentialsIfFound(service);
+
         document.addEventListener('submit', (event) => {
-            SavePassword();
+            AutofillToSave();
         });
-        // when submit is clicked checkForCredentials()
-    } 
+    }
     else if (passwordFound) {
         // signup forms
         SuggestPassword();
-        // when submit is clicked savePassword()
+        document.addEventListener('submit', (event) => {
+            AutofillToSave();
+        });
+
     }  
 };
 
