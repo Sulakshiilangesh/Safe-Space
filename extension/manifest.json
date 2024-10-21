@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Safe-Space",
+  "version": "1.0",
+  "description": "Your very own password manager.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "notifications",
+    "scripting"
+  ],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "js/background.js" 
+  },
+  "action": {
+    "default_popup": "MasterPassword.html",
+    "default_icon": {
+      "16": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/general.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
+  }
+}
