@@ -22,6 +22,43 @@ const passwordContractAddress = process.env.PASSWORDCONTRACTADDRESS;
 
 const masterABI = [
   {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: "string", name: "name", type: "string" },
+    ],
+    name: "userDeleted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: "string", name: "name", type: "string" },
+    ],
+    name: "userRegistered",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "deleteUser",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getMasterPassword",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getUsername",
+    outputs: [{ internalType: "string", name: "", type: "string" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       { internalType: "string", name: "_name", type: "string" },
       { internalType: "string", name: "_email", type: "string" },
@@ -35,22 +72,6 @@ const masterABI = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-  },
-  {
-    inputs: [],
-    name: "getUsername",
-    outputs: [{ internalType: "string", name: "", type: "string" }],
-    stateMutability: "view",
-    type: "function",
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: "getMasterPassword",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-    constant: true,
   },
 ];
 
@@ -264,9 +285,20 @@ app.post("/registerUser", async (req, res) => {
       encryptedMasterPassword
     ); // Pass hashed password
     await tx.wait();
+    res.send('User Registered successfully')
   } catch (error) {
     console.error(error); // Log the error for debugging
     res.status(500).send("Error registering user");
+  }
+});
+
+app.delete("/user", async (req, res) => {
+  try {
+    await masterContract.deleteUser();
+    res.send('User Deleted successfully')
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting user");
   }
 });
 
@@ -376,7 +408,7 @@ app.put("/password", async (req, res) => {
     const tx = await passwordContract.editPassword(
       service,
       encUsername,
-        encPassword
+      encPassword
     );
     await tx.wait();
     res.send(`Password updated for service: ${service}`);
@@ -403,13 +435,23 @@ app.get("/passwords", async (req, res) => {
     // console.log(passwords)
     const formattedPasswords = passwords.map((pw) => ({
       service: pw.service,
-      username: decryptPassword(pw.username.split(":")[0], pw.username.split(":")[1], pw.username.split(":")[2], storedMaster),
-      password: decryptPassword(pw.password.split(":")[0], pw.password.split(":")[1], pw.password.split(":")[2], storedMaster),
+      username: decryptPassword(
+        pw.username.split(":")[0],
+        pw.username.split(":")[1],
+        pw.username.split(":")[2],
+        storedMaster
+      ),
+      password: decryptPassword(
+        pw.password.split(":")[0],
+        pw.password.split(":")[1],
+        pw.password.split(":")[2],
+        storedMaster
+      ),
     }));
     res.json(formattedPasswords);
   } catch (error) {
-    console.log(error)
-    
+    console.log(error);
+
     res.status(500).send("Error retrieving all passwords");
   }
 });

@@ -6,10 +6,15 @@ contract MasterContract {
     string email;
     bytes32 encryptedMasterPassword;
 
+    event userRegistered(string name);
+    event userDeleted(string name);
+
     function registerUser(string memory _name, string memory _email, bytes32 _encryptedMasterPassword) public {
         name = _name;
         email = _email;
         encryptedMasterPassword = _encryptedMasterPassword;
+
+        emit userRegistered(name);
     }
 
     function getUsername() public view returns(string memory) {
@@ -19,4 +24,13 @@ contract MasterContract {
     function getMasterPassword() public view returns(bytes32) {
         return encryptedMasterPassword;
     }
+
+    function deleteUser() public{
+        string memory r = name;
+        name = "";
+        email = "";
+        encryptedMasterPassword = bytes32(0);
+
+        emit userDeleted(r);
+    }    
 }
