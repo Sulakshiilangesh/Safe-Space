@@ -4,8 +4,8 @@ pragma solidity ^0.8.0;
 contract PasswordContract {
     struct Password {
         string service;
-        bytes32 username;
-        bytes32 password;
+        string username;
+        string password;
     }
 
     mapping(string => Password) private passwords;
@@ -15,9 +15,13 @@ contract PasswordContract {
     event PasswordUpdated(string service);
     event PasswordDeleted(string service);
 
-    function addPassword(string memory _service, bytes32 _username, bytes32 _password) public {
+    function addPassword(
+        string memory _service,
+        string memory _username,
+        string memory _password
+    ) public {
         require(bytes(_service).length > 0, "Service name cannot be empty");
-        require(passwords[_service].username == bytes32(0), "Service already exists");
+        require(bytes(passwords[_service].username).length == 0, "Service already exists");
 
         passwords[_service] = Password(_service, _username, _password);
         services.push(_service);
@@ -27,23 +31,27 @@ contract PasswordContract {
 
     function getPassword(string memory _service) public view returns (Password memory) {
         require(bytes(_service).length > 0, "Service name cannot be empty");
-        require(passwords[_service].username != bytes32(0), "Service does not exist");
+        require(bytes(passwords[_service].username).length > 0, "Service does not exist");
 
         return passwords[_service];
     }
 
-    function editPassword(string memory _service, bytes32 _username, bytes32 _password) public {
+    function editPassword(
+        string memory _service,
+        string memory _username,
+        string memory _password
+    ) public {
         require(bytes(_service).length > 0, "Service name cannot be empty");
-        require(passwords[_service].username != bytes32(0), "Service does not exist");
+        require(bytes(passwords[_service].username).length > 0, "Service does not exist");
 
-        passwords[_service] = Password(_service, _username, _password);
+        passwords[_service] = Password(_service, _username, _password); 
 
         emit PasswordUpdated(_service);
     }
 
     function deletePassword(string memory _service) public {
         require(bytes(_service).length > 0, "Service name cannot be empty");
-        require(passwords[_service].username != bytes32(0), "Service does not exist");
+        require(bytes(passwords[_service].username).length > 0, "Service does not exist");
 
         delete passwords[_service];
         removeService(_service);
@@ -73,6 +81,6 @@ contract PasswordContract {
                 return i;
             }
         }
-        return services.length; // Return a value outside the array bounds to indicate not found
+        return services.length; // Return a value outside the array bounds to indicate 
     }
 }
