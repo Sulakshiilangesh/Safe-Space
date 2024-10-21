@@ -8,6 +8,7 @@
     "express": "^4.21.1"
   },
   "devDependencies": {
+    "globals": "^15.11.0",
     "hardhat": "^2.22.13"
   }
 }

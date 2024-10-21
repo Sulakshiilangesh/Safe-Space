@@ -13,8 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
         const url = document.getElementById('website').value;
 
-        
-
         // Save the credentials (for example, to blockchain, or however you're saving them)
         // Call your storage function here
 

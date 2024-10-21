@@ -115,13 +115,13 @@ function SuggestPassword() {
     });
 }
 
-function AutoFillCredentials() { // Get Value
+function AutoFillCredentials() { 
     // retrieve credentials using current tab url
     // Decrypt Password
     // Autofill into login form
 }
 
-function SavePassword() { // Set Value
+function SavePassword() {
     // Get Login credentials from loginform and display it autofilled in SavePasssword.html\
     if (event.target.tagName === 'FORM') {
         var username = event.target.querySelector('input[type="text"], input[name="username"]').value;
@@ -145,9 +145,7 @@ function SavePassword() { // Set Value
 }
 
 function checkForCredentials() {
-    // check url of current tab
-    // if url is found in saved passwords, AutoFillCredentials()
-    // else savePassword()
+    
 }
 
 // For every current Chrome tab
@@ -174,7 +172,7 @@ function pageLoad() {
     validInputs = inputs.length - invalidInputs;
     if (passwordFound && validInputs <= 2) {
         // login forms
-        alert("login page detected");
+        alert("Login Page Detected!");
         document.addEventListener('submit', (event) => {
             SavePassword();
         });

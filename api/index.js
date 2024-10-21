@@ -292,7 +292,7 @@ app.post("/registerUser", async (req, res) => {
   }
 });
 
-app.delete("/user", async (req, res) => {
+app.delete("/deleteUser", async (req, res) => {
   try {
     await masterContract.deleteUser();
     res.send('User Deleted successfully')
